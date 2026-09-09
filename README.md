@@ -45,3 +45,9 @@ O teste usa `http://localhost:5176/`; ajuste o endereço no ficheiro se o Vite i
 ## Estado da loja
 
 Os produtos, fotografias e preços são ilustrativos. Favoritos e carrinho usam o armazenamento local do navegador. Não existe processamento de pagamentos nem envio de encomendas.
+
+## Vercel
+
+Importe este repositório e mantenha a Root Directory na raiz do repositório (`.`).
+O ficheiro `vercel.json` instala as dependências em `Hair`, executa a compilação
+ e publica `Hair/dist`. As rotas da aplicação são encaminhadas para `index.html`.
