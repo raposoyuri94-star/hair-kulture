@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-ssr/
+artifacts/
+test-results/
+playwright-report/
+.env
+.env.*
+!.env.example
+*.local
+*.log
+.DS_Store
+.idea/
+.vscode/
