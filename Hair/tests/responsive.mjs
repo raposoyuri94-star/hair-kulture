@@ -1,4 +1,4 @@
-﻿import { chromium } from '@playwright/test';
+import { chromium } from '@playwright/test';
 import { spawn } from 'node:child_process';
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
@@ -15,7 +15,6 @@ try {
     await page.goto('http://127.0.0.1:5188/',{waitUntil:'networkidle'});
     await page.evaluate(()=>localStorage.clear());
     const assertFits=async(label)=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${label} overflows at ${width}px`);
-    console.log(await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).filter(el=>el.getBoundingClientRect().right>innerWidth+1 && getComputedStyle(el).position!=='fixed').slice(0,12).map(el=>({tag:el.tagName,cls:el.className,right:el.getBoundingClientRect().right}))));
     await assertFits('Page');
     if(width<1024){
       await page.getByRole('button',{name:'Abrir ou fechar menu'}).click();
