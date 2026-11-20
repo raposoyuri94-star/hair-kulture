@@ -1,0 +1,49 @@
+{
+  "file": "kulture-campaign-prices-1080x1920.mp4",
+  "duration_seconds": 24,
+  "frames": 720,
+  "resolution": [
+    1080,
+    1920
+  ],
+  "fps": 30,
+  "full_video_audio_decode": "passed",
+  "audio_peak_dBFS": -3.2,
+  "integrated_loudness_LUFS": -16.0,
+  "opening": "Three direct product shots: Volume / Textura / Kulture",
+  "opening_cut_times_seconds": [
+    0,
+    0.55,
+    1.1
+  ],
+  "price_card_seconds": [
+    14,
+    24
+  ],
+  "prices_checked_against_user_image": 24,
+  "price_basis": "2 saias",
+  "sizes_inches": [
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    22,
+    24,
+    26,
+    28,
+    30,
+    32
+  ],
+  "handle": "@hairkulture.mz",
+  "scene_functions": [
+    "filmProductIntro",
+    "filmBundles",
+    "filmTexture",
+    "filmHair",
+    "filmEnd",
+    "filmPrices"
+  ],
+  "browser_errors": []
+}

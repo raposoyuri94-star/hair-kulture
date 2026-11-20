@@ -1,0 +1,21 @@
+{
+  "file": "kulture-campaign-hair-only-1080x1920.mp4",
+  "variant": "hair-only",
+  "duration_seconds": 18,
+  "frames": 540,
+  "resolution": [
+    1080,
+    1920
+  ],
+  "full_decode": "passed",
+  "audio": "AAC stereo, 48 kHz",
+  "replacement": "11.3-14.2 s: hair-bundle detail replaces model portrait",
+  "scene_functions": [
+    "filmIntro",
+    "filmBundles",
+    "filmTexture",
+    "filmHair",
+    "filmEnd"
+  ],
+  "browser_errors": []
+}

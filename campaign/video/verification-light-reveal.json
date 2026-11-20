@@ -1,0 +1,23 @@
+{
+  "file": "kulture-campaign-light-reveal-1080x1920.mp4",
+  "duration_seconds": 18,
+  "frames": 540,
+  "resolution": [
+    1080,
+    1920
+  ],
+  "full_decode": "passed",
+  "audio": "AAC stereo, 48 kHz",
+  "audio_peak_dBFS": -2.3,
+  "integrated_loudness_LUFS": -15.7,
+  "opening": "Rose light trail, single soft camera flash, expanding light reveal and studio reflection",
+  "intro_sound": "Smooth air swells, shutter and chime; no ripping sound",
+  "scene_functions": [
+    "filmLightIntro",
+    "filmBundles",
+    "filmTexture",
+    "filmHair",
+    "filmEnd"
+  ],
+  "browser_errors": []
+}

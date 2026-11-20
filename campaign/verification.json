@@ -1,0 +1,41 @@
+{
+  "video": {
+    "file": "campaign\\video\\kulture-campaign-1080x1920.mp4",
+    "duration_seconds": 18,
+    "frames": 540,
+    "fps": 30,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "codec": "H.264",
+    "color": "yuv420p limited-range BT.709",
+    "audio": "AAC stereo, 48 kHz",
+    "full_decode": "passed",
+    "integrated_audio_loudness_LUFS": -15.5,
+    "audio_true_peak_dBFS": -2.1
+  },
+  "instagram": {
+    "01-volume.png": [
+      1080,
+      1350
+    ],
+    "02-assinatura.png": [
+      1080,
+      1350
+    ],
+    "03-presenca.png": [
+      1080,
+      1350
+    ],
+    "04-capa-reel.png": [
+      1080,
+      1920
+    ]
+  },
+  "logo": "Original supplied JPEG composited without redrawing",
+  "handle": "@hairkulture.mz",
+  "language": "Portuguese",
+  "browser_errors": [],
+  "image_generation": "Built-in image_gen; full prompts in source/prompts.md"
+}

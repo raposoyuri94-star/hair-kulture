@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="pt-MZ">
+<meta charset="utf-8">
+<title>Kulture — A tua essência. Em cada fio.</title>
+<link rel="icon" href="data:,">
+<style>
+  @font-face { font-family: Outfit; src: url('../../Hair/node_modules/@fontsource/outfit/files/outfit-latin-400-normal.woff2'); font-weight: 400; }
+  @font-face { font-family: Outfit; src: url('../../Hair/node_modules/@fontsource/outfit/files/outfit-latin-500-normal.woff2'); font-weight: 500; }
+  body { margin: 0; background: #291d22; display: grid; place-items: center; }
+  canvas { max-width: 100vw; max-height: 100vh; object-fit: contain; }
+</style>
+<canvas id="art" width="1080" height="1920"></canvas>
+<script>
+const canvas = document.getElementById('art');
+const ctx = canvas.getContext('2d', {alpha: false});
+const W = 1080, H = 1920;
+const palette = {rose:'#bb9696', cream:'#fff3e9', ink:'#38262c', pale:'#e9c6c4'};
+const images = {};
+const variant = new URLSearchParams(location.search).get('variant') || 'original';
+const lightReveal = variant === 'light-reveal';
+const priceVersion = variant === 'prices';
+const hairOnly = priceVersion || lightReveal || variant === 'hair-only';
+let prices;
+const clamp = v => Math.max(0, Math.min(1, v));
+const ease = v => { v = clamp(v); return v*v*(3-2*v); };
+const serif = 'Garamond, "Times New Roman", serif';
+const sans = 'Outfit, Arial, sans-serif';
+let paper;
+
+function fill(color) { ctx.fillStyle=color; ctx.fillRect(0,0,canvas.width,canvas.height); }
+function cover(img, x, y, w, h, zoom=1, panX=0, panY=0) {
+  const scale = Math.max(w/img.width,h/img.height)*zoom;
+  const dw=img.width*scale, dh=img.height*scale;
+  ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+  ctx.drawImage(img,x+(w-dw)/2+panX,y+(h-dh)/2+panY,dw,dh); ctx.restore();
+}
+function type(text,x,y,size=26,opts={}) {
+  const {color=palette.cream,align='left',spacing=0,family=sans,italic=false,weight=400} = opts;
+  ctx.fillStyle=color; ctx.font=`${italic?'italic ':''}${weight} ${size}px ${family}`;
+  ctx.textAlign=align; ctx.textBaseline='alphabetic';
+  if (!spacing) return ctx.fillText(text,x,y);
+  const width=[...text].reduce((sum,c)=>sum+ctx.measureText(c).width+spacing,0)-spacing;
+  let dx=align==='center'?x-width/2:align==='right'?x-width:x;
+  ctx.textAlign='left';
+  for(const c of text){ctx.fillText(c,dx,y);dx+=ctx.measureText(c).width+spacing;}
+}
+function lines(text,x,y,size,leading,opts={}) { text.forEach((line,i)=>type(line,x,y+i*leading,size,{family:serif,...opts})); }
+function rule(x,y,w,color=palette.cream) {ctx.fillStyle=color;ctx.globalAlpha*=.55;ctx.fillRect(x,y,w,1);ctx.globalAlpha/=.55;}
+function fade(alpha, fn) {ctx.save();ctx.globalAlpha=clamp(alpha);fn();ctx.restore();}
+function gradientShade(top=.1,bottom=.3) {
+  const g=ctx.createLinearGradient(0,0,0,canvas.height);
+  g.addColorStop(0,`rgba(40,18,26,${top})`);g.addColorStop(.5,'rgba(40,18,26,0)');g.addColorStop(1,`rgba(40,18,26,${bottom})`);
+  ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+function logo(x,y,w) {
+  // The supplied embossed identity, sampled directly; the mark is never redrawn.
+  ctx.drawImage(images.logo,60,460,780,820,x,y,w,w*820/780);
+}
+function footer() {
+  ctx.fillStyle=palette.rose;ctx.fillRect(0,1080,1080,270);
+  logo(55,1093,228);
+  type('TISSAGENS / BUNDLES',350,1154,21,{color:palette.ink,spacing:3});
+  type('A tua essência. Em cada fio.',350,1202,36,{color:palette.ink,family:serif,italic:true});
+  rule(350,1224,656,palette.ink);
+  type('@hairkulture.mz',350,1275,30,{color:palette.ink});
+  type('↗',1007,1275,32,{color:palette.ink,align:'right'});
+}
+function post(index) {
+  canvas.width=1080;canvas.height=1350;ctx.imageSmoothingQuality='high';
+  fill(palette.rose);
+  if(index===1){
+    cover(images.bundles,0,0,1080,1080,1,0,35);
+    gradientShade(.13,0);
+    type('KULTURE / HAIR BUNDLES',66,76,22,{spacing:4});
+    lines(['Volume que','se sente.'],65,184,100,92);
+    rule(68,314,95);
+    type('O TEU PRÓXIMO LOOK COMEÇA AQUI.',68,353,19,{spacing:2.4});
+  } else if(index===2){
+    cover(images.portrait,0,0,1080,1080,1,0,80);
+    gradientShade(.12,0);
+    type('O EFEITO KULTURE',66,76,22,{spacing:4});
+    lines(['O teu look.','A tua','assinatura.'],65,402,93,92);
+    rule(69,650,100);
+    type('TISSAGENS COM PRESENÇA.',69,690,18,{spacing:2});
+  } else {
+    cover(images.texture,0,0,1080,1080,1.025,0,0);
+    gradientShade(.08,0);
+    type('CADA FIO, UMA EXPRESSÃO.',66,76,21,{spacing:3});
+    lines(['Ondas com','presença.'],65,205,103,96);
+    rule(69,350,100);
+    type('ESCOLHE O TEU PRÓXIMO LOOK.',69,389,19,{spacing:2});
+  }
+  footer();
+}
+function makePaper() {
+  const p=document.createElement('canvas');p.width=p.height=180;
+  const c=p.getContext('2d');c.fillStyle='#b68e91';c.fillRect(0,0,180,180);
+  let seed=1949;const rnd=()=>{seed=(1664525*seed+1013904223)>>>0;return seed/4294967296;};
+  for(let i=0;i<6000;i++){c.fillStyle=`rgba(${rnd()>.5?'255,234,224':'62,32,36'},${rnd()*.045})`;c.fillRect(rnd()*180,rnd()*180,rnd()*1.7+.3,.65);}
+  return ctx.createPattern(p,'repeat');
+}
+function seam(y){return 540+Math.sin(y*.047)*13+Math.sin(y*.113)*8+Math.sin(y*.019)*18;}
+function paperHalf(side, amount) {
+  ctx.save();
+  const direction=side==='left'?-1:1;
+  ctx.translate(direction*amount*980,-amount*32);
+  ctx.translate(540,960);ctx.rotate(direction*amount*.105);ctx.translate(-540,-960);
+  ctx.beginPath();
+  if(side==='left'){
+    ctx.moveTo(-400,-200);ctx.lineTo(seam(-200),-200);
+    for(let y=-200;y<=2200;y+=11)ctx.lineTo(seam(y),y);
+    ctx.lineTo(-400,2200);
+  }else{
+    ctx.moveTo(1480,-200);ctx.lineTo(seam(-200),-200);
+    for(let y=-200;y<=2200;y+=11)ctx.lineTo(seam(y),y);
+    ctx.lineTo(1480,2200);
+  }
+  ctx.closePath();ctx.shadowColor='rgba(43,20,27,.35)';ctx.shadowBlur=35;ctx.shadowOffsetX=direction*-20;
+  ctx.fillStyle=paper;ctx.fill();ctx.shadowBlur=0;ctx.shadowOffsetX=0;
+  ctx.beginPath();ctx.moveTo(seam(-200),-200);for(let y=-200;y<=2200;y+=11)ctx.lineTo(seam(y),y);
+  ctx.strokeStyle='#e8c3bb';ctx.lineWidth=4;ctx.stroke();
+  ctx.restore();
+}
+function tag(label,y=210){type(label,540,y,22,{align:'center',spacing:5});}
+function filmIntro(t) {
+  cover(images.logo,0,0,W,H,1.035-.035*ease(t/4.7));
+  const reveal=ease((t-1.35)/2.15);
+  paperHalf('left',reveal);paperHalf('right',reveal);
+  fade(1-ease((t-1.1)/.55),()=>{
+    tag('KULTURE APRESENTA',270);
+    lines(['A tua próxima','assinatura.'],540,810,100,105,{align:'center'});
+    type('TISSAGENS / BUNDLES',540,1540,23,{align:'center',spacing:5});
+    type('@hairkulture.mz',540,1630,27,{align:'center'});
+  });
+  fade(ease((t-3.25)/.6),()=>{
+    tag('A TUA ESSÊNCIA. EM CADA FIO.',240);
+    type('@hairkulture.mz',540,1660,31,{align:'center'});
+  });
+}
+function lightTrail(t,alpha=1) {
+  const head=clamp((t+.06)/1.44),tail=Math.max(0,head-.43);
+  const point=p=>({x:540+465*Math.sin(p*Math.PI*2+.45),y:-140+p*2260});
+  ctx.save();ctx.globalCompositeOperation='screen';ctx.lineCap='round';
+  const draw=(offset,width,color,blur)=>{
+    ctx.beginPath();
+    for(let i=0;i<=85;i++){
+      const p=tail+(head-tail)*i/85,pt=point(p);
+      if(!i)ctx.moveTo(pt.x+offset,pt.y);else ctx.lineTo(pt.x+offset,pt.y);
+    }
+    ctx.strokeStyle=color;ctx.lineWidth=width;ctx.shadowColor='#f3b9b4';ctx.shadowBlur=blur;ctx.stroke();
+  };
+  ctx.globalAlpha=alpha*.55;draw(0,21,'#daa1a2',45);
+  ctx.globalAlpha=alpha*.9;draw(0,3.2,'#ffe9d7',16);
+  for(let i=-2;i<=2;i++){ctx.globalAlpha=alpha*.38;draw(i*9,1.1,'#f8d0c3',8);}
+  const tip=point(head),glow=ctx.createRadialGradient(tip.x,tip.y,0,tip.x,tip.y,105);
+  glow.addColorStop(0,'rgba(255,243,222,.95)');glow.addColorStop(.12,'rgba(255,214,197,.55)');glow.addColorStop(1,'rgba(255,199,190,0)');
+  ctx.shadowBlur=0;ctx.globalAlpha=alpha;ctx.fillStyle=glow;ctx.fillRect(tip.x-105,tip.y-105,210,210);ctx.restore();
+}
+function lightIntroSurface(t) {
+  cover(images.texture,0,0,W,H,1.18+.035*clamp(t/2),38-32*clamp(t/2),35);
+  ctx.fillStyle='rgba(35,17,27,.36)';ctx.fillRect(0,0,W,H);
+  const shade=ctx.createLinearGradient(0,0,W,H);
+  shade.addColorStop(0,'rgba(44,20,32,.28)');shade.addColorStop(1,'rgba(44,20,32,0)');ctx.fillStyle=shade;ctx.fillRect(0,0,W,H);
+  fade(1-ease((t-.88)/.42),()=>{
+    type('KULTURE APRESENTA',78,240,22,{spacing:5});
+    lines(['A tua próxima','assinatura.'],75,475,112,110);
+    type('TISSAGENS / BUNDLES',80,1575,23,{spacing:4});
+    type('@hairkulture.mz',80,1660,29);
+  });
+  lightTrail(t,1-ease((t-1.16)/.33));
+}
+function filmLightIntro(t) {
+  cover(images.logo,0,0,W,H,1.055-.055*ease((t-1.2)/3.3));
+  const opening=ease((t-1.16)/1.37),radius=1250*opening;
+  if(opening<1){
+    // An expanding pool of light reveals the supplied identity beneath the hair.
+    ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);
+    if(radius>0){ctx.moveTo(540+radius,960);ctx.arc(540,960,radius,0,Math.PI*2);}
+    ctx.clip('evenodd');lightIntroSurface(t);ctx.restore();
+    if(radius>2){
+      ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=(1-opening)*.85;
+      ctx.beginPath();ctx.arc(540,960,radius,0,Math.PI*2);
+      ctx.strokeStyle='#f6c3b9';ctx.lineWidth=18;ctx.shadowColor='#ffe2ce';ctx.shadowBlur=55;ctx.stroke();
+      ctx.lineWidth=1.6;ctx.strokeStyle='#fff0dc';ctx.stroke();ctx.restore();
+    }
+  }
+  // A single soft photographic flash punctuates the reveal.
+  const flash=Math.exp(-Math.pow((t-1.46)/.10,2))*.48;
+  if(flash>.002)fade(flash,()=>{ctx.fillStyle='#fff0e6';ctx.fillRect(0,0,W,H);});
+  fade(ease((t-2.3)/.55),()=>{
+    tag('A TUA ESSÊNCIA. EM CADA FIO.',240);
+    type('@hairkulture.mz',540,1660,31,{align:'center'});
+  });
+  if(t>2.65&&t<3.8){
+    // A moving softbox reflection glides over the embossed logo.
+    const x=-650+ease((t-2.65)/1.15)*2450;
+    ctx.save();ctx.globalCompositeOperation='screen';ctx.translate(x,960);ctx.rotate(.24);
+    const glint=ctx.createLinearGradient(-170,0,170,0);
+    glint.addColorStop(0,'rgba(255,233,217,0)');glint.addColorStop(.5,'rgba(255,233,217,.19)');glint.addColorStop(1,'rgba(255,233,217,0)');
+    ctx.fillStyle=glint;ctx.fillRect(-170,-1450,340,2900);ctx.restore();
+  }
+}
+function filmBundles(t) {
+  const p=clamp(t/3.8);
+  cover(images.bundles,0,0,W,H,1.01+.045*p,-12*p,20*p);
+  gradientShade(.22,.20);
+  const a=ease(t/.45);fade(a,()=>{
+    type('TISSAGENS / BUNDLES',78,224+(1-a)*25,23,{spacing:4});
+    lines(['Volume que','se sente.'],75,365+(1-a)*25,116,108);
+    rule(80,535,100);
+    type('@hairkulture.mz',80,1670,29);
+  });
+}
+function filmProductIntro(t) {
+  // Three editorial cuts start with the product already on screen.
+  const shot=t<.55?0:t<1.1?1:2;
+  const start=[0,.55,1.1][shot],length=[.55,.55,.9][shot],p=clamp((t-start)/length);
+  if(shot===0)cover(images.texture,0,0,W,H,1.14+.025*p,20-30*p,0);
+  else if(shot===1)cover(images.bundles,0,0,W,H,1.24+.04*p,0,170);
+  else cover(images.bundles,0,0,W,H,1.025-.025*p,-8*p,0);
+  gradientShade(.12,.48);
+  type('TISSAGENS / BUNDLES',78,230,23,{spacing:4});
+  const slide=(1-ease(p/.22))*28;
+  type(['VOLUME.','TEXTURA.','KULTURE.'][shot],75+slide,1440,shot===2?123:132,{family:serif});
+  rule(80,1500,112);
+  type('A TUA ESSÊNCIA. EM CADA FIO.',80,1560,23,{spacing:2.3});
+  type('@hairkulture.mz',80,1670,29);
+}
+function filmTexture(t) {
+  const p=clamp(t/2.8);
+  cover(images.texture,0,0,W,H,1.08-.025*p,18*p,0);
+  gradientShade(.12,.30);
+  const a=ease(t/.45);fade(a,()=>{
+    type('O DETALHE FAZ A DIFERENÇA.',78,224+(1-a)*25,21,{spacing:3});
+    lines(['Ondas com','presença.'],75,375+(1-a)*25,115,108);
+    type('@hairkulture.mz',80,1670,29);
+  });
+}
+function filmPortrait(t) {
+  const p=clamp(t/2.9);
+  cover(images.portrait,0,0,W,H,1.02+.035*p,-10*p,35);
+  gradientShade(.12,.48);
+  const a=ease(t/.4);fade(a,()=>{
+    type('O EFEITO KULTURE',78,224,23,{spacing:4});
+    lines(['O teu look.','A tua assinatura.'],75,1430+(1-a)*25,94,94);
+    type('@hairkulture.mz',80,1670,29);
+  });
+}
+function filmHair(t) {
+  const p=clamp(t/2.9);
+  // An intimate camera move across the actual bundle still life, with no model.
+  cover(images.bundles,0,0,W,H,1.28+.02*p,70+15*p,-160-15*p);
+  gradientShade(.15,.5);
+  const a=ease(t/.4);fade(a,()=>{
+    type('O EFEITO KULTURE',78,224,23,{spacing:4});
+    lines(['O teu look.','A tua assinatura.'],75,1430+(1-a)*25,94,94);
+    type('@hairkulture.mz',80,1670,29);
+  });
+}
+function filmEnd(t) {
+  cover(images.logo,0,0,W,H,1.02-.02*ease(t/3.4));
+  fade(ease(t/.5),()=>{
+    type('TISSAGENS / BUNDLES',540,238,22,{align:'center',spacing:5});
+    lines(['A tua essência.','Em cada fio.'],540,342,76,77,{align:'center',italic:true});
+    type('@hairkulture.mz',540,1660,36,{align:'center'});
+    rule(434,1710,212);
+  });
+}
+function priceCard() {
+  fill(palette.rose);
+  logo(72,143,245);
+  type('TABELA DE',373,222,27,{color:palette.ink,spacing:6});
+  type('PREÇOS',365,326,108,{color:palette.ink,family:serif});
+  type('SAIAS',373,378,24,{color:palette.ink,spacing:8});
+  ctx.fillStyle='#ebc9c5';ctx.beginPath();ctx.roundRect(70,445,940,100,20);ctx.fill();
+  type(`PREÇOS PARA ${prices.quantity_saias} SAIAS`,540,485,29,{color:palette.ink,align:'center',weight:500,spacing:1});
+  type('('+prices.coverage_note+')',540,524,25,{color:palette.ink,align:'center'});
+  const x=70,y=588,w=940,header=90,rh=56;
+  ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,header+rh*prices.rows.length,18);ctx.clip();
+  ctx.fillStyle='#956c71';ctx.fillRect(x,y,w,header);
+  type('TAMANHO',165,641,21,{align:'center',spacing:1.5});
+  type('LISO /',450,626,25,{align:'center'});
+  type('KINKY LISO',450,658,25,{align:'center'});
+  type('ONDULADO /',825,626,23,{align:'center'});
+  type('CACHEADO / CRESPO',825,658,22,{align:'center'});
+  const money=value=>String(value).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' '+prices.currency;
+  prices.rows.forEach((row,i)=>{
+    const rowY=y+header+i*rh;
+    ctx.fillStyle=i%2?'#e7c6c2':'#f1d9d3';ctx.fillRect(x,rowY,w,rh);
+    type(row.inches+'″',165,rowY+38,34,{color:palette.ink,align:'center'});
+    type(money(row.straight),450,rowY+38,35,{color:palette.ink,align:'center'});
+    type(money(row.textured),825,rowY+38,35,{color:palette.ink,align:'center'});
+  });
+  ctx.fillStyle='rgba(105,65,73,.2)';ctx.fillRect(260,y,1,header+rh*prices.rows.length);ctx.fillRect(640,y,1,header+rh*prices.rows.length);ctx.restore();
+  type('PRAZO DE ENCOMENDA',540,1409,19,{color:palette.ink,align:'center',spacing:2.8});
+  type(prices.delivery_business_days+' dias úteis para chegar',540,1455,31,{color:palette.ink,align:'center'});
+  type('100% CABELO HUMANO',540,1522,23,{color:palette.ink,align:'center',spacing:3});
+  rule(415,1564,250,palette.ink);
+  type(prices.handle,540,1635,36,{color:palette.ink,align:'center',weight:500});
+  type('A tua essência. Em cada fio.',540,1705,37,{color:palette.ink,align:'center',family:serif,italic:true});
+}
+function filmPrices(){priceCard();}
+const scenes=priceVersion
+  ?[{start:0,fn:filmProductIntro},{start:2,fn:filmBundles},{start:5.8,fn:filmTexture},{start:8.6,fn:filmHair},{start:11.5,fn:filmEnd},{start:14,fn:filmPrices}]
+  :[{start:0,fn:lightReveal?filmLightIntro:filmIntro},{start:4.7,fn:filmBundles},{start:8.5,fn:filmTexture},{start:11.3,fn:hairOnly?filmHair:filmPortrait},{start:14.2,fn:filmEnd}];
+function frame(t){
+  if(canvas.height!==H){canvas.width=W;canvas.height=H;}
+  ctx.imageSmoothingQuality='high';ctx.globalAlpha=1;fill(palette.rose);
+  let scene=scenes[0];for(const s of scenes)if(t>=s.start)scene=s;
+  const elapsed=t-scene.start;
+  // Brief soft dissolves between the editorial camera moves.
+  const i=scenes.indexOf(scene);
+  if(i>0 && elapsed<.26){scenes[i-1].fn(t-scenes[i-1].start);fade(ease(elapsed/.26),()=>scene.fn(elapsed));}
+  else scene.fn(elapsed);
+}
+function contactSheet(){
+  const stills=[];for(let i=1;i<=3;i++){post(i);const copy=document.createElement('canvas');copy.width=1080;copy.height=1350;copy.getContext('2d').drawImage(canvas,0,0);stills.push(copy);}
+  canvas.width=1800;canvas.height=920;fill('#f3e7e1');
+  type('KULTURE',66,92,50,{color:palette.ink,family:serif,spacing:8});
+  type('A tua essência. Em cada fio.',1735,90,25,{color:palette.ink,align:'right',family:serif,italic:true});
+  for(let i=0;i<3;i++){ctx.drawImage(stills[i],66+i*574,140,520,650);type(['01 / VOLUME','02 / ASSINATURA','03 / PRESENÇA'][i],66+i*574,840,17,{color:palette.ink,spacing:2});}
+  type('@hairkulture.mz',1735,872,21,{color:palette.ink,align:'right'});
+}
+function openerPreview(){
+  const times=priceVersion?[.15,.7,1.3,3,8,20]:[.15,.7,1.46,1.95,2.6,3.4],stills=[];
+  for(const time of times){frame(time);const still=document.createElement('canvas');still.width=270;still.height=480;still.getContext('2d').drawImage(canvas,0,0,270,480);stills.push(still);}
+  canvas.width=1620;canvas.height=530;fill('#f3e7e1');
+  stills.forEach((still,i)=>{ctx.drawImage(still,i*270,0);type(times[i].toFixed(2)+' s',i*270+20,512,20,{color:palette.ink});});
+}
+window.ready=(async()=>{
+  await Promise.all([document.fonts.load('400 30px Outfit'),document.fonts.load('500 30px Outfit')]);await document.fonts.ready;
+  if(priceVersion){const response=await fetch('../assets/prices.json');if(!response.ok)throw Error('Price data failed to load');prices=await response.json();}
+  await Promise.all([['logo','kulture-logo-original.jpeg'],['bundles','bundles.png'],['portrait','portrait.png'],['texture','texture.png']].map(([key,file])=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{images[key]=img;resolve();};img.onerror=reject;img.src='../assets/'+file;})));
+  const sample=document.createElement('canvas');sample.width=sample.height=1;const sc=sample.getContext('2d');sc.drawImage(images.logo,100,350,1,1,0,0,1,1);const [r,g,b]=sc.getImageData(0,0,1,1).data;palette.rose=`rgb(${r},${g},${b})`;
+  paper=makePaper();frame(0);return true;
+})();
+window.art={post,frame,contactSheet,openerPreview,export:(format='image/png',quality=.94)=>canvas.toDataURL(format,quality),metrics:()=>({width:canvas.width,height:canvas.height,palette,variant,scenes:scenes.map(scene=>scene.fn.name),...(priceVersion?{prices,price_card_start:14,duration:24}:{})})};
+</script>
+</html>

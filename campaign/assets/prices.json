@@ -1,0 +1,24 @@
+{
+  "currency": "MT",
+  "quantity_saias": 2,
+  "coverage_note": "1 cabeça completa, com volume natural",
+  "delivery_business_days": 10,
+  "handle": "@hairkulture.mz",
+  "columns": ["Tamanho", "Liso / Kinky liso", "Ondulado / Cacheado / Crespo"],
+  "rows": [
+    { "inches": 10, "straight": 4800, "textured": 5300 },
+    { "inches": 12, "straight": 5350, "textured": 5850 },
+    { "inches": 14, "straight": 6000, "textured": 6500 },
+    { "inches": 16, "straight": 6700, "textured": 7200 },
+    { "inches": 18, "straight": 7400, "textured": 7900 },
+    { "inches": 20, "straight": 7900, "textured": 8400 },
+    { "inches": 22, "straight": 8700, "textured": 9200 },
+    { "inches": 24, "straight": 9500, "textured": 10000 },
+    { "inches": 26, "straight": 10300, "textured": 10800 },
+    { "inches": 28, "straight": 11400, "textured": 11900 },
+    { "inches": 30, "straight": 12500, "textured": 13000 },
+    { "inches": 32, "straight": 13750, "textured": 14250 }
+  ],
+  "source": "../reference/price-list-original.jpeg",
+  "note": "Prices transcribed from the user-supplied image. Instagram handle follows the user's explicit instruction in the conversation."
+}
