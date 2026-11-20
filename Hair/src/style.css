@@ -146,3 +146,7 @@ html[lang|="pt"] .product-title-row h3{font-size:15px}
 .product-options .price-fields{grid-template-columns:1fr}
 .product-detail>.product-photo{align-self:start}
 @media(max-width:767px){.hair-categories{grid-template-columns:1fr;gap:36px}.hair-categories .product-photo{aspect-ratio:4 / 3}.hair-categories .product-title-row h3{font-size:24px}.category-description{min-height:0}.product-options .price-config{padding:20px}.product-detail>.product-photo{width:100%}}
+.about-page{padding-top:64px}
+.about-page .editorial-copy h1{font-size:clamp(38px,4.5vw,64px);line-height:1.08;letter-spacing:-2px;margin:25px 0}
+.mobile-nav>a{display:flex;align-items:center;justify-content:space-between;padding:14px 0;font-size:16px}
+@media(max-width:767px){.about-page{padding-top:32px}.about-page .editorial-copy h1{font-size:42px}}

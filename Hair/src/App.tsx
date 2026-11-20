@@ -4,6 +4,7 @@ import { ArrowUpRight, ArrowRight, Heart, ShoppingBag, Search, X, Plus, Minus, C
 import RootLayout from '../components/layout';
 import Navbar from '../components/navbar';
 import Hero from '../components/hero';
+import About from '../components/about';
 import PriceSelector from '../components/price-selector';
 import { getHairPrice, priceLists } from './prices';
 import { catalog, money, restoreBag, variantKey } from './catalog';
@@ -26,9 +27,11 @@ function ProductPhoto({ category }: { category: number }) {
   return <div className={'product-photo ' + item.photoClass}><img src={item.image} alt={item.name + ' — imagem ilustrativa'} loading="lazy" width="512" height="680" /></div>;
 }
 export default function App() {
-  const [category, setCategory] = useState('Todos');
+  const isAbout = /^\/about\/?$/.test(window.location.pathname);
+  const [category, setCategory] = useState(() => { const value = new URLSearchParams(window.location.search).get('category'); return value && [...catalog.map(item => item.name), 'Favoritos'].includes(value) ? value : 'Todos'; });
+  useEffect(() => { document.title = isAbout ? 'Sobre | Hair Kulture' : 'Hair Kulture | O seu cabelo. As suas regras.'; }, [isAbout]);
   const [query, setQuery] = useState('');
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(() => new URLSearchParams(window.location.search).get('search') === '1');
   const [menuOpen, setMenuOpen] = useState(false);
   const [bagOpen, setBagOpen] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
@@ -43,6 +46,7 @@ export default function App() {
   const total = bag.reduce((sum, item) => sum + getHairPrice(item.category, item.length, item.option)! * item.quantity, 0);
   const visible = catalog.filter(item => (category === 'Todos' || category === item.name || category === 'Favoritos' && favorites.includes(item.id)) && (item.name + ' ' + item.description).toLocaleLowerCase('pt-MZ').includes(query.toLocaleLowerCase('pt-MZ')));
   function browse(value = 'Todos') {
+    if (isAbout) { window.location.assign('/?category=' + encodeURIComponent(value) + '#shop'); return; }
     setCategory(value); setQuery(''); setMenuOpen(false);
     document.getElementById('shop')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }
@@ -62,6 +66,7 @@ export default function App() {
     <div className="announcement">CABELO BONITO. BOA ENERGIA. A SUA ESSÊNCIA.</div>
     <Navbar count={count} favorites={favorites} menuOpen={menuOpen} setMenuOpen={setMenuOpen} setSearchOpen={setSearchOpen} setBagOpen={setBagOpen} browse={browse} />
     <main id="main">
+      {isAbout ? <About onGuide={() => setGuide(true)} /> : <>
       <Hero onShop={() => { setCategory('Todos'); setQuery(''); }} />
       <div className="values-strip"><span>Para todos os seus momentos</span><Sparkles aria-hidden="true" /><span>Um novo penteado. Uma nova energia.</span><Sparkles aria-hidden="true" /><span>Encontre o seu estilo</span></div>
       <section id="shop" className="shop-section section-wrap" aria-labelledby="shop-title">
@@ -74,26 +79,12 @@ export default function App() {
         </article>)}</div>
         {visible.length === 0 && <div className="empty-state"><ShoppingBag size={32} /><h3>{category === 'Favoritos' ? 'Os seus favoritos começam aqui.' : 'Nenhum produto encontrado.'}</h3><p>Explore os três tipos de cabelo e escolha o seu favorito.</p><button className="button primary" onClick={() => browse()}>Ver todos os produtos<ArrowRight size={18} /></button></div>}
       </section>
-      <section className="editorial section-wrap" id="about"><div className="editorial-image"><img src="/images/campaign.png" alt="Pormenor de cabelo ondulado e brilhante com risca lateral" width="700" height="750" loading="lazy" />
-          <video
-            className="editorial-video"
-            src="/videos/hero-enhanced.mp4"
-            poster="/videos/hero-enhanced-poster.jpg"
-            autoPlay
-            muted
-            loop
-            playsInline
-            disablePictureInPicture
-            disableRemotePlayback
-            preload="auto"
-            aria-label="Vídeo da coleção Hair Kulture"
-            onError={(event) => { event.currentTarget.hidden = true; }}
-          />
-        </div><div className="editorial-copy"><span className="eyebrow">BEM-VINDA À HAIR KULTURE</span><h2>Mais do que cabelo.<br />Uma nova atitude.</h2><p>A confiança de um novo penteado. A vontade de olhar outra vez ao espelho. Aquela sensação de estar no seu melhor.</p><p>A Hair Kulture é um espaço para experimentar novos penteados, expressar a sua personalidade e viver cada dia à sua maneira.</p><button className="text-link" onClick={() => setGuide(true)}>Descubra o seu cabelo ideal<ArrowUpRight size={19} /></button></div></section>
+
       <section className="care-section section-wrap" id="care"><h2>Um pouco de cuidado.<br />Mais dias de cabelo bonito.</h2><div className="faq-list">{[['Devo escolher uma peruca ou tissagens?', 'Escolha uma peruca para um penteado completo que pode colocar e retirar. As tissagens servem para aplicações costuradas ou perucas à medida. Um profissional pode ajudar a escolher comprimentos, fecho e frontal.'], ['Como cuidar das perucas e tissagens?', 'Desembarace suavemente das pontas para a raiz. Guarde as perucas num suporte e as tissagens organizadas. Siga as instruções do produto e confirme o tipo de fibra antes de lavar ou aplicar calor.'], ['Já posso fazer uma encomenda?', 'Esta loja está em demonstração. Pode explorar produtos, guardar favoritos e preparar o carrinho. Os pagamentos e o processamento de encomendas ainda não estão disponíveis.']].map(([q, a]) => <details key={q}><summary>{q}<ChevronDown size={20} /></summary><p>{a}</p></details>)}</div></section>
-      <section className="closing section-wrap"><p>O seu próximo visual espera por si.</p><a className="button primary" href="#shop">Ver coleção<ArrowUpRight size={19} /></a></section>
+      </>}
+      <section className="closing section-wrap"><p>O seu próximo visual espera por si.</p><a className="button primary" href="/#shop">Ver coleção<ArrowUpRight size={19} /></a></section>
     </main>
-    <footer className="footer section-wrap"><div className="footer-top"><a className="wordmark" href="/">Hair Kulture<span>®</span></a><p>Cabelo bonito. À sua maneira. Em Moçambique.</p><div><a href="#shop">Loja</a><a href="#about">A nossa história</a><a href="#care">Cuidados e dúvidas</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Hair Kulture</span><span>Para cada versão de si.</span></div></footer>
+    <footer className="footer section-wrap"><div className="footer-top"><a className="wordmark" href="/">Hair Kulture<span>®</span></a><p>Cabelo bonito. À sua maneira. Em Moçambique.</p><div><a href="/#shop">Loja</a><a href="/about">A nossa história</a><a href="/#care">Cuidados e dúvidas</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Hair Kulture</span><span>Para cada versão de si.</span></div></footer>
 
     <div className={'toast ' + (notice ? 'visible' : '')} role="status">{notice && <><Check size={18} />{notice}<button onClick={() => { setBagOpen(true); setNotice(''); }}>Ver carrinho</button></>}</div>
     {selected !== null && <Modal title={catalog[selected].name} onClose={() => setSelected(null)} wide><div className="product-detail"><ProductPhoto category={selected} /><PriceSelector key={selected} category={selected} onAdd={(length, option) => add(selected, length, option)} /></div></Modal>}

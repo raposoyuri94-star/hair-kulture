@@ -45,8 +45,22 @@ try {
   await page.getByPlaceholder('Pesquisar por tipo de cabelo...').fill('not-a-product');
   await page.getByRole('heading', { name: 'Nenhum produto encontrado.' }).waitFor();
   await page.getByRole('button', { name: 'Fechar pesquisa' }).click();
+  assert.equal(await page.locator('#about').count(), 0);
+  await page.getByRole('navigation').getByRole('link', { name: 'Sobre', exact: true }).click();
+  await page.waitForURL('**/about');
+  await page.getByRole('heading', { level: 1, name: /Mais do que cabelo/ }).waitFor();
+  assert.equal(await page.locator('#shop').count(), 0);
+  assert.equal(await page.locator('.editorial-video').count(), 1);
+  await page.waitForFunction(() => { const video = document.querySelector('.editorial-video'); return video && video.readyState >= 2 && video.currentTime > 0 && !video.paused; });
+  assert.match(await page.locator('.editorial-video').getAttribute('src'), /kulture-cinematic.mp4/);
+  await page.reload();
+  await page.getByRole('heading', { level: 1, name: /Mais do que cabelo/ }).waitFor();
+  await page.getByRole('button', { name: 'Abrir carrinho, 2 artigos', exact: true }).click();
+  assert.equal(await amount(), '13950MT');
+  await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Descubra o seu cabelo ideal' }).click();
   await dialog.getByRole('button', { name: /Saias/ }).click();
+  await page.waitForURL('**/?category=Saias#shop');
   assert.equal(await page.locator('.product-card').count(), 1);
   await page.getByRole('button', { name: 'Todos', exact: true }).click();
   await page.setViewportSize({ width: 390, height: 844 });
@@ -57,6 +71,15 @@ try {
   await page.getByRole('button', { name: 'Escolher Half Wigs', exact: true }).click();
   assert.ok(await dialog.getByRole('button', { name: 'Adicionar ao carrinho', exact: true }).isVisible());
   assert.ok(await dialog.evaluate(element => element.scrollWidth <= element.clientWidth));
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Abrir ou fechar menu' }).click();
+  await page.getByRole('navigation', { name: 'Navega\u00e7\u00e3o m\u00f3vel' }).getByRole('link', { name: 'Sobre', exact: true }).click();
+  await page.waitForURL('**/about');
+  await page.getByRole('heading', { level: 1, name: /Mais do que cabelo/ }).waitFor();
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await page.getByRole('button', { name: 'Pesquisar produtos', exact: true }).click();
+  await page.waitForURL('**/?search=1#shop');
+  await page.getByPlaceholder('Pesquisar por tipo de cabelo...').waitFor();
   assert.deepEqual(errors, []);
   console.log('PASS: three cards, configuration modal, variant cart, merging, totals, quantity removal, persistence, favorites, search, guide, mobile navigation and layout.');
 } finally {
