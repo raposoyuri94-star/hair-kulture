@@ -117,3 +117,8 @@ html[lang="pt"] .product-title-row h3{font-size:15px}
   .section-wrap { padding-inline: 16px; }
 }
 @media(max-width:359px){.header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px;padding-inline:10px}.header .wordmark{font-size:20px;letter-spacing:-1px}.nav-actions .icon-button,.bag-button{padding-inline:4px}}
+
+.editorial-image{position:relative}
+.editorial-image .editorial-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;background:#211a20}
+.editorial-video[hidden]{display:none}
+@media(max-width:767px){.editorial-image:has(.editorial-video:not([hidden])){aspect-ratio:480 / 752}}

@@ -66,7 +66,22 @@ export default function App() {
         {visible.length === 0 && <div className="empty-state"><ShoppingBag size={32} /><h3>{category === 'Favoritos' ? 'Os seus favoritos começam aqui.' : category === 'Croché' ? category + ' em breve.' : 'Nenhum produto encontrado.'}</h3><p>{category === 'Favoritos' ? 'Toque no coração de uma peruca ou de um kit de tissagens para guardar nos favoritos.' : 'Explore perucas e tissagens para encontrar o seu próximo visual.'}</p><button className="button primary" onClick={() => browse()}>Ver todos os produtos<ArrowRight size={18} /></button></div>}
         <p className="catalog-note">Coleção de demonstração. Imagens e preços ilustrativos; ainda não aceitamos encomendas.</p>
       </section>
-      <section className="editorial section-wrap" id="about"><div className="editorial-image"><img src="/images/campaign.png" alt="Pormenor de cabelo ondulado e brilhante com risca lateral" width="700" height="750" loading="lazy" /></div><div className="editorial-copy"><span className="eyebrow">BEM-VINDA À HAIR KULTURE</span><h2>Mais que cabelo.<br />Uma nova atitude.</h2><p>A confiança de um novo penteado. A vontade de olhar outra vez ao espelho. Aquela sensação de estar no seu melhor.</p><p>A Hair Kulture é um espaço para experimentar novos visuais, expressar a sua personalidade e viver cada dia à sua maneira.</p><button className="text-link" onClick={() => setGuide(true)}>Descubra o seu cabelo ideal<ArrowUpRight size={19} /></button></div></section>
+      <section className="editorial section-wrap" id="about"><div className="editorial-image"><img src="/images/campaign.png" alt="Pormenor de cabelo ondulado e brilhante com risca lateral" width="700" height="750" loading="lazy" />
+          <video
+            className="editorial-video"
+            src="/videos/hero-enhanced.mp4"
+            poster="/videos/hero-enhanced-poster.jpg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            disablePictureInPicture
+            disableRemotePlayback
+            preload="auto"
+            aria-label="Vídeo da coleção Hair Kulture"
+            onError={(event) => { event.currentTarget.hidden = true; }}
+          />
+        </div><div className="editorial-copy"><span className="eyebrow">BEM-VINDA À HAIR KULTURE</span><h2>Mais que cabelo.<br />Uma nova atitude.</h2><p>A confiança de um novo penteado. A vontade de olhar outra vez ao espelho. Aquela sensação de estar no seu melhor.</p><p>A Hair Kulture é um espaço para experimentar novos visuais, expressar a sua personalidade e viver cada dia à sua maneira.</p><button className="text-link" onClick={() => setGuide(true)}>Descubra o seu cabelo ideal<ArrowUpRight size={19} /></button></div></section>
       <section className="care-section section-wrap" id="care"><h2>Um pouco de cuidado.<br />Mais dias de cabelo bonito.</h2><div className="faq-list">{[['Devo escolher uma peruca ou tissagens?', 'Escolha uma peruca para um penteado completo que pode colocar e retirar. As tissagens servem para aplicações costuradas ou perucas à medida. Um profissional pode ajudar a escolher comprimentos, fecho e frontal.'], ['Como cuidar das perucas e tissagens?', 'Desembarace suavemente das pontas para a raiz. Guarde as perucas num suporte e as tissagens organizadas. Siga as instruções do produto e confirme o tipo de fibra antes de lavar ou aplicar calor.'], ['Já posso fazer uma encomenda?', 'Esta loja está em demonstração. Pode explorar produtos, guardar favoritos e preparar o carrinho. Os pagamentos e o processamento de encomendas ainda não estão disponíveis.']].map(([q, a]) => <details key={q}><summary>{q}<ChevronDown size={20} /></summary><p>{a}</p></details>)}</div></section>
       <section className="closing section-wrap"><p>O seu próximo visual espera por si.</p><a className="button primary" href="#shop">Ver coleção<ArrowUpRight size={19} /></a></section>
     </main>
