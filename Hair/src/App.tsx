@@ -1,3 +1,4 @@
+import { siteUrl, sitePath } from './urls';
 import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { ArrowUpRight, ArrowRight, Heart, ShoppingBag, Search, X, Plus, Minus, Check, Sparkles, ChevronDown } from 'lucide-react';
@@ -28,8 +29,8 @@ function ProductPhoto({ category }: { category: number }) {
   return <div className={'product-photo ' + item.photoClass}><img src={item.image} alt={item.name + ' — imagem ilustrativa'} loading="lazy" width="512" height="680" /></div>;
 }
 export default function App() {
-  const isGallery = /^\/gallery\/?$/.test(window.location.pathname);
-  const isAbout = /^\/about\/?$/.test(window.location.pathname);
+  const isGallery = /^\/gallery\/?$/.test(sitePath());
+  const isAbout = /^\/about\/?$/.test(sitePath());
   const [category, setCategory] = useState(() => { const value = new URLSearchParams(window.location.search).get('category'); return value && [...catalog.map(item => item.name), 'Favoritos'].includes(value) ? value : 'Todos'; });
   useEffect(() => { document.title = isGallery ? 'Galeria | Hair Kulture' : isAbout ? 'Sobre | Hair Kulture' : 'Hair Kulture | O seu cabelo. As suas regras.'; }, [isAbout, isGallery]);
   const [query, setQuery] = useState('');
@@ -48,7 +49,7 @@ export default function App() {
   const total = bag.reduce((sum, item) => sum + getHairPrice(item.category, item.length, item.option)! * item.quantity, 0);
   const visible = catalog.filter(item => (category === 'Todos' || category === item.name || category === 'Favoritos' && favorites.includes(item.id)) && (item.name + ' ' + item.description).toLocaleLowerCase('pt-MZ').includes(query.toLocaleLowerCase('pt-MZ')));
   function browse(value = 'Todos') {
-    if (isAbout || isGallery) { window.location.assign('/?category=' + encodeURIComponent(value) + '#shop'); return; }
+    if (isAbout || isGallery) { window.location.assign(siteUrl('/?category=' + encodeURIComponent(value) + '#shop')); return; }
     setCategory(value); setQuery(''); setMenuOpen(false);
     document.getElementById('shop')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }
@@ -84,9 +85,9 @@ export default function App() {
 
       <section className="care-section section-wrap" id="care"><h2>Um pouco de cuidado.<br />Mais dias de cabelo bonito.</h2><div className="faq-list">{[['Devo escolher uma peruca ou tissagens?', 'Escolha uma peruca para um penteado completo que pode colocar e retirar. As tissagens servem para aplicações costuradas ou perucas à medida. Um profissional pode ajudar a escolher comprimentos, fecho e frontal.'], ['Como cuidar das perucas e tissagens?', 'Desembarace suavemente das pontas para a raiz. Guarde as perucas num suporte e as tissagens organizadas. Siga as instruções do produto e confirme o tipo de fibra antes de lavar ou aplicar calor.'], ['Já posso fazer uma encomenda?', 'Esta loja está em demonstração. Pode explorar produtos, guardar favoritos e preparar o carrinho. Os pagamentos e o processamento de encomendas ainda não estão disponíveis.']].map(([q, a]) => <details key={q}><summary>{q}<ChevronDown size={20} /></summary><p>{a}</p></details>)}</div></section>
       </>}
-      <section className="closing section-wrap"><p>O seu próximo visual espera por si.</p><a className="button primary" href="/#shop">Ver coleção<ArrowUpRight size={19} /></a></section>
+      <section className="closing section-wrap"><p>O seu próximo visual espera por si.</p><a className="button primary" href={siteUrl('/#shop')}>Ver coleção<ArrowUpRight size={19} /></a></section>
     </main>
-    <footer className="footer section-wrap"><div className="footer-top"><a className="wordmark" href="/">Hair Kulture<span>®</span></a><p>Cabelo bonito. À sua maneira. Em Moçambique.</p><div><a href="/#shop">Loja</a><a href="/gallery">Galeria</a><a href="/about">A nossa história</a><a href="/#care">Cuidados e dúvidas</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Hair Kulture</span><span>Para cada versão de si.</span></div></footer>
+    <footer className="footer section-wrap"><div className="footer-top"><a className="wordmark" href={siteUrl('/')}>Hair Kulture<span>®</span></a><p>Cabelo bonito. À sua maneira. Em Moçambique.</p><div><a href={siteUrl('/#shop')}>Loja</a><a href={siteUrl('/gallery')}>Galeria</a><a href={siteUrl('/about')}>A nossa história</a><a href={siteUrl('/#care')}>Cuidados e dúvidas</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Hair Kulture</span><span>Para cada versão de si.</span></div></footer>
 
     <div className={'toast ' + (notice ? 'visible' : '')} role="status">{notice && <><Check size={18} />{notice}<button onClick={() => { setBagOpen(true); setNotice(''); }}>Ver carrinho</button></>}</div>
     {selected !== null && <Modal title={catalog[selected].name} onClose={() => setSelected(null)} wide><div className="product-detail"><ProductPhoto category={selected} /><PriceSelector key={selected} category={selected} onAdd={(length, option) => add(selected, length, option)} /></div></Modal>}

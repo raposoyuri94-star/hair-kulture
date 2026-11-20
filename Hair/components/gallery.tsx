@@ -1,16 +1,17 @@
+import { siteUrl } from '../src/urls';
 import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 
 const photos = [
-  { src: '/images/campaign.png', title: 'O seu estilo, a sua Kulture', alt: 'Duas mulheres com cabelo longo, liso e ondulado, num cenário rosa.' },
-  { src: '/images/wigs.png', title: 'Texturas com personalidade', alt: 'Selecção de perucas com diferentes cortes e texturas.' },
-  { src: '/images/bundles.png', title: 'Movimento em cada fio', alt: 'Tissagens de cabelo apresentadas em conjuntos.' },
+  { src: siteUrl('/images/campaign.png'), title: 'O seu estilo, a sua Kulture', alt: 'Duas mulheres com cabelo longo, liso e ondulado, num cenário rosa.' },
+  { src: siteUrl('/images/wigs.png'), title: 'Texturas com personalidade', alt: 'Selecção de perucas com diferentes cortes e texturas.' },
+  { src: siteUrl('/images/bundles.png'), title: 'Movimento em cada fio', alt: 'Tissagens de cabelo apresentadas em conjuntos.' },
 ];
 
 const videos = [
-  { file: 'gallery-enhanced-1.mp4', poster: '/videos/gallery-enhanced-1-poster.jpg', title: 'Comprimento e movimento' },
-  { file: 'gallery-enhanced-2.mp4', poster: '/videos/gallery-enhanced-2-poster.jpg', title: 'Volume com personalidade' },
-  { file: 'gallery-enhanced-3.mp4', poster: '/videos/gallery-enhanced-3-poster.jpg', title: 'Caracóis em destaque' },
+  { file: 'gallery-enhanced-1.mp4', poster: siteUrl('/videos/gallery-enhanced-1-poster.jpg'), title: 'Comprimento e movimento' },
+  { file: 'gallery-enhanced-2.mp4', poster: siteUrl('/videos/gallery-enhanced-2-poster.jpg'), title: 'Volume com personalidade' },
+  { file: 'gallery-enhanced-3.mp4', poster: siteUrl('/videos/gallery-enhanced-3-poster.jpg'), title: 'Caracóis em destaque' },
 ];
 
 export default function Gallery() {
@@ -32,7 +33,7 @@ export default function Gallery() {
       <p>Texturas, movimento e inspiração para o seu próximo penteado. Encontre um estilo que seja seu.</p>
     </div>
     <div className="gallery-videos">{videos.map(video => <figure key={video.file}>
-      <video src={'/videos/' + video.file} poster={video.poster} aria-label={video.title} autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback preload="auto" />
+      <video src={siteUrl('/videos/' + video.file)} poster={video.poster} aria-label={video.title} autoPlay muted loop playsInline disablePictureInPicture disableRemotePlayback preload="auto" />
       <figcaption>{video.title}</figcaption>
     </figure>)}</div>
     <h2 className="gallery-photos-title">Inspiração da marca</h2>

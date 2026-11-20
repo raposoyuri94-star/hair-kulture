@@ -1,14 +1,15 @@
+import { siteUrl } from '../src/urls';
 import { ArrowUpRight } from 'lucide-react';
 
 export default function About({ onGuide }: { onGuide: () => void }) {
   return <div className="about-page">
     <section className="editorial section-wrap" id="about" aria-labelledby="about-title">
       <div className="editorial-image">
-        <img src="/images/campaign.png" alt="Pormenor de cabelo ondulado e brilhante com risca lateral" width="700" height="750" loading="lazy" />
+        <img src={siteUrl('/images/campaign.png')} alt="Pormenor de cabelo ondulado e brilhante com risca lateral" width="700" height="750" loading="lazy" />
           <video
             className="editorial-video"
-            src="/videos/kulture-cinematic.mp4"
-            poster="/videos/kulture-cinematic-poster.jpg"
+            src={siteUrl('/videos/kulture-cinematic.mp4')}
+            poster={siteUrl('/videos/kulture-cinematic-poster.jpg')}
             autoPlay
             muted
             loop

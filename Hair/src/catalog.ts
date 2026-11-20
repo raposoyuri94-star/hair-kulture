@@ -1,8 +1,9 @@
+import { siteUrl } from './urls';
 import { getHairPrice, priceLists } from './prices';
 
 export const catalog = priceLists.map((list, id) => ({
   id, name: list.name,
-  image: ['/images/wigs.png', '/images/bundles.png', '/images/campaign.png'][id],
+  image: siteUrl(['/images/wigs.png', '/images/bundles.png', '/images/campaign.png'][id]),
   photoClass: ['wigs', 'bundles', 'campaign'][id],
   description: [
     'Escolha o comprimento e a densidade da sua half wig.',
