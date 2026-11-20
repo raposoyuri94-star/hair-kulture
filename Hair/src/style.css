@@ -150,3 +150,26 @@ html[lang|="pt"] .product-title-row h3{font-size:15px}
 .about-page .editorial-copy h1{font-size:clamp(38px,4.5vw,64px);line-height:1.08;letter-spacing:-2px;margin:25px 0}
 .mobile-nav>a{display:flex;align-items:center;justify-content:space-between;padding:14px 0;font-size:16px}
 @media(max-width:767px){.about-page{padding-top:32px}.about-page .editorial-copy h1{font-size:42px}}
+.gallery-page{padding-block:64px 48px}
+.gallery-heading{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:40px}
+.gallery-heading h1{font-size:clamp(52px,7vw,88px);line-height:1.1;letter-spacing:-3px;margin-top:16px}
+.gallery-heading p{max-width:350px;color:var(--muted);font-size:16px;line-height:1.8}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px 24px}
+.gallery-grid figure{margin:0;min-width:0}
+.gallery-grid figure:first-child{grid-column:1 / -1}
+.gallery-photo{display:block;width:100%;padding:0;overflow:hidden;border-radius:8px;background:var(--panel)}
+.gallery-photo img{width:100%;aspect-ratio:1;object-fit:cover}
+.gallery-grid figure:first-child img{aspect-ratio:3 / 2}
+.gallery-grid figcaption{font-size:16px;margin-top:14px}
+.gallery-lightbox{border:0;border-radius:12px;background:var(--surface);color:var(--text);padding:20px;width:min(1000px,calc(100% - 32px));max-height:90dvh;overflow:auto}
+.gallery-lightbox::backdrop{background:rgba(25,12,20,.85)}
+.gallery-lightbox>.icon-button{margin-left:auto;margin-bottom:12px}
+.gallery-lightbox>img{width:100%;height:auto;max-height:70dvh;object-fit:contain}
+.gallery-lightbox>p{margin-top:16px;font-size:16px}
+@media(max-width:767px){.gallery-page{padding-block:36px}.gallery-heading{display:block;margin-bottom:28px}.gallery-heading p{margin-top:24px}.gallery-heading h1{font-size:58px}.gallery-grid{grid-template-columns:1fr;gap:28px}.gallery-grid figure:first-child{grid-column:auto}.gallery-grid figure:first-child img{aspect-ratio:1}}
+.gallery-videos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-bottom:64px}
+.gallery-videos figure{margin:0;min-width:0}
+.gallery-videos video{display:block;width:100%;aspect-ratio:9 / 16;object-fit:cover;background:#211a20;border-radius:8px}
+.gallery-videos figcaption{font-size:16px;line-height:1.5;margin-top:14px}
+.gallery-photos-title{font-size:32px;letter-spacing:-1px;margin-bottom:28px}
+@media(max-width:767px){.gallery-videos{grid-template-columns:1fr;gap:30px;margin-bottom:44px}.gallery-photos-title{font-size:28px}}

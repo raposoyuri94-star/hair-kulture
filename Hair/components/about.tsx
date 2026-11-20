@@ -21,11 +21,11 @@ export default function About({ onGuide }: { onGuide: () => void }) {
           />
       </div>
       <div className="editorial-copy">
-        {/* Add or edit your brand story in the paragraphs below. */}
         <span className="eyebrow">BEM-VINDA À HAIR KULTURE</span>
         <h1 id="about-title">Mais do que cabelo.<br />Uma nova atitude.</h1>
-        <p>A confiança de um novo penteado. A vontade de olhar outra vez ao espelho. Aquela sensação de estar no seu melhor.</p>
-        <p>A Hair Kulture é um espaço para experimentar novos penteados, expressar a sua personalidade e viver cada dia à sua maneira.</p>
+        <p>Sou a Kéllyn dos Santos Guirrugo, CEO e criadora da Hair Kulture. Criei esta marca com o desejo de ajudar cada pessoa a expressar a sua identidade e a sentir-se confiante através do seu cabelo.</p>
+        <p>Na Hair Kulture, dedicamo-nos à venda de cabelo em Moçambique, com opções de half wigs, saias, closures e frontal laces. Queremos que encontre o comprimento, a textura e o estilo que combinam consigo.</p>
+        <p>Mais do que um novo penteado, queremos fazer parte da confiança com que vive cada dia. O seu estilo, a sua essência, a sua Kulture.</p>
         <button className="text-link" onClick={onGuide}>Descubra o seu cabelo ideal<ArrowUpRight size={19} /></button>
       </div>
     </section>

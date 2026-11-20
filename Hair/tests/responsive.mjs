@@ -21,18 +21,18 @@ try {
       const nav=page.getByRole('navigation',{name:'Navegação móvel'});
       await nav.waitFor({state:'visible'});
       assert.ok(await nav.evaluate(el=>el.getBoundingClientRect().right<=innerWidth));
-      await nav.getByRole('button',{name:'Tissagens',exact:true}).click();
+      await nav.getByRole('button',{name:'Saias',exact:true}).click();
     }else{
-      await page.getByRole('navigation',{name:'Navegação principal'}).getByRole('link',{name:'Tissagens',exact:true}).click();
+      await page.getByRole('navigation',{name:'Navegação principal'}).getByRole('link',{name:'Saias',exact:true}).click();
     }
-    await page.getByRole('button',{name:'Ver Kit de Tissagens Onduladas',exact:true}).click();
+    await page.getByRole('button',{name:'Escolher Saias',exact:true}).click();
     let dialog=page.getByRole('dialog');
     assert.ok(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth+1),`Product dialog overflows at ${width}`);
     await dialog.getByRole('button',{name:'Adicionar ao carrinho',exact:true}).click();
     await page.locator('.bag-button').click();
     dialog=page.getByRole('dialog');
     assert.ok(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth+1),`Cart overflows at ${width}`);
-    await dialog.getByRole('button',{name:'Aumentar quantidade de Kit de Tissagens Onduladas'}).click();
+    await dialog.getByRole('button',{name:/Aumentar quantidade de Saias/}).click();
     await page.keyboard.press('Escape');
     await page.getByRole('button',{name:'Todos',exact:true}).click();
     await assertFits('Collection');

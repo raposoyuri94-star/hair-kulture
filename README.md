@@ -29,6 +29,8 @@ A aplicação compilada fica em `Hair/dist`.
 - `Hair/components/`: navegação, secção principal e layout.
 - `Hair/src/style.css`: estilos e adaptação a dispositivos móveis.
 - `Hair/public/images/`: imagens geradas para a demonstração.
+- `Hair/public/videos/`: apenas os vídeos e pré-visualizações usados no site.
+- `campaign/reference/website-videos/`: originais dos vídeos, guardados para futuras edições e excluídos da publicação do site.
 - `Hair/tests/storefront.mjs`: verificações com Playwright e Microsoft Edge.
 
 ## Testes no navegador
@@ -44,7 +46,7 @@ O teste usa `http://localhost:5176/`; ajuste o endereço no ficheiro se o Vite i
 
 ## Estado da loja
 
-Os produtos, fotografias e preços são ilustrativos. Favoritos e carrinho usam o armazenamento local do navegador. Não existe processamento de pagamentos nem envio de encomendas.
+Os preços das half wigs, saias e laces seguem as tabelas fornecidas pela marca. As fotografias do catálogo são ilustrativas. Favoritos e carrinho usam o armazenamento local do navegador. Não existe processamento de pagamentos nem envio de encomendas.
 
 ## Vercel
 
