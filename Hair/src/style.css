@@ -21,11 +21,11 @@
 
 
 /* Portuguese copy needs extra room in headlines and product controls. */
-html[lang="pt"] .hero h1{font-size:clamp(48px,5.2vw,78px);letter-spacing:-3px}
-html[lang="pt"] .product-title-row{flex-wrap:wrap}
-html[lang="pt"] .product-meta{flex-wrap:wrap;gap:4px 10px}
-html[lang="pt"] .product-title-row h3{font-size:15px}
-@media(max-width:767px){html[lang="pt"] .hero h1{font-size:clamp(43px,11.5vw,64px);letter-spacing:-2px}html[lang="pt"] .button{gap:14px;padding-inline:20px}html[lang="pt"] .values-strip{font-size:9px}html[lang="pt"] .editorial-copy h2{font-size:38px}}
+html[lang|="pt"] .hero h1{font-size:clamp(48px,5.2vw,78px);letter-spacing:-3px}
+html[lang|="pt"] .product-title-row{flex-wrap:wrap}
+html[lang|="pt"] .product-meta{flex-wrap:wrap;gap:4px 10px}
+html[lang|="pt"] .product-title-row h3{font-size:15px}
+@media(max-width:767px){html[lang|="pt"] .hero h1{font-size:clamp(43px,11.5vw,64px);letter-spacing:-2px}html[lang|="pt"] .button{gap:14px;padding-inline:20px}html[lang|="pt"] .values-strip{font-size:9px}html[lang|="pt"] .editorial-copy h2{font-size:38px}}
 
 /* Responsive layout: phones, tablets, and wide screens. */
 .header, .hero-copy, .section-heading > div, .collection-toolbar,
@@ -68,7 +68,7 @@ html[lang="pt"] .product-title-row h3{font-size:15px}
   }
   .hero { grid-template-columns: 1fr 1fr; min-height: 460px; }
   .hero-copy { padding: 40px 24px; }
-  html[lang="pt"] .hero h1 { font-size: clamp(44px, 5.8vw, 60px); letter-spacing: -2px; }
+  html[lang|="pt"] .hero h1 { font-size: clamp(44px, 5.8vw, 60px); letter-spacing: -2px; }
   .values-strip { flex-wrap: wrap; text-align: center; gap: 14px; }
   .editorial { gap: 32px; }
   .editorial-copy h2 { font-size: 38px; }
@@ -82,7 +82,7 @@ html[lang="pt"] .product-title-row h3{font-size:15px}
   .nav-actions { gap: 0; flex-shrink: 0; }
   .hero { min-height: 0; }
   .hero-copy { padding: 32px 20px; }
-  html[lang="pt"] .hero h1 { font-size: clamp(42px, 11vw, 64px); }
+  html[lang|="pt"] .hero h1 { font-size: clamp(42px, 11vw, 64px); }
   .hero-visual { height: auto; min-height: 0; aspect-ratio: 4 / 3; }
   .section-wrap { padding-inline: 20px; }
   .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; }
@@ -122,3 +122,27 @@ html[lang="pt"] .product-title-row h3{font-size:15px}
 .editorial-image .editorial-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;background:#211a20}
 .editorial-video[hidden]{display:none}
 @media(max-width:767px){.editorial-image:has(.editorial-video:not([hidden])){aspect-ratio:480 / 752}}
+
+.price-config{min-width:0;background:var(--panel);border-radius:8px;padding:30px}
+.price-fields{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.price-fields label{display:flex;flex-direction:column;gap:9px;font-size:14px;font-weight:500;min-width:0}
+
+.price-fields select{font:inherit;font-weight:400;color:var(--text);background:var(--surface);width:100%;min-width:0;min-height:48px;border:1px solid var(--line);border-radius:6px;padding:10px 36px 10px 12px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23765963' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.price-result{border-top:1px solid var(--line);margin-top:28px;padding-top:24px}
+.price-result>span{font-size:14px;line-height:1.6;color:var(--muted)}
+.price-result strong{display:block;font-size:clamp(28px,3.5vw,44px);font-weight:500;letter-spacing:-1px;line-height:1.3;margin:8px 0 12px;color:var(--accent)}
+.price-result p,.price-delivery{font-size:14px;line-height:1.6;color:var(--muted)}
+.price-delivery{margin-top:16px}
+
+
+.hair-categories{grid-template-columns:repeat(3,minmax(0,1fr))}
+.hair-categories .product-title-row{margin-top:20px;min-height:0}
+.hair-categories .product-title-row h3{font-size:22px;line-height:1.25}
+.category-description{font-size:14px;line-height:1.7;color:var(--muted);margin-top:12px;min-height:48px}
+.category-starting{font-size:16px;font-weight:500;margin-top:14px}
+.configure-add{margin-top:24px}
+.product-options{min-width:0}
+.product-options .price-config{padding:24px}
+.product-options .price-fields{grid-template-columns:1fr}
+.product-detail>.product-photo{align-self:start}
+@media(max-width:767px){.hair-categories{grid-template-columns:1fr;gap:36px}.hair-categories .product-photo{aspect-ratio:4 / 3}.hair-categories .product-title-row h3{font-size:24px}.category-description{min-height:0}.product-options .price-config{padding:20px}.product-detail>.product-photo{width:100%}}
